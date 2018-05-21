@@ -2,38 +2,35 @@ const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
 
-let win
+let window
 
-function createWindow () {
-  win = new BrowserWindow({
-    icon:'icon.ico',
+app.on('ready',() => {
+  window = new BrowserWindow({
     show: false,
-    backgroundColor: '#21252b',
+    backgroundColor: '#12252b',
     webPreferences: {
-      experimentalFeatures: true,
       webgl: true,
-      webSecurity: false
+      experimentalFeatures: true,
+      webSecurity: false,
     }
   })
-  var index_path = path.join(__dirname, 'index.html')
-  if (__dirname.includes('xampp\\htdocs\\blockbench\\web')) {
-    index_path = path.join(__dirname, 'index.php')
-  }
-  win.setMenu(null);
-  win.maximize()
-  win.show()
-  win.loadURL(url.format({
-    pathname: index_path,
-    protocol: 'file:',
-    slashes: true
-  }))
-  win.on('closed', () => {
-    win = null
-  })
-  //win.webContents.openDevTools()
-}
 
-app.on('ready', createWindow)
+  const startUrl = process.env.APP_URL || url.format({
+    pathname: path.join(__dirname, './build/index.html'),
+    protocol: 'file:',
+    slashes: true,
+  })
+
+  window.loadURL(startUrl)
+  window.setMenu(null)
+  window.maximize()
+  window.show()
+  window.webContents.openDevTools()
+
+  window.on('closed',() => {
+    window = null
+  })
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -41,9 +38,8 @@ app.on('window-all-closed', () => {
   }
 })
 
-
-app.on('activate', () => {
-  if (win === null) {
+app.on('active',() => {
+  if (window != null) {
     createWindow()
   }
 })

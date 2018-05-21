@@ -60,12 +60,17 @@
     "target": "dmg"
   },
   "scripts": {
+    "start": "parcel ./src/index.html -d build/",
+    "start-dev": "APP_URL=http://localhost:1234 electron .",
     "pack": "build --dir",
     "dist": "build --publish always"
   },
   "devDependencies": {
+    "@vue/component-compiler-utils": "^1.2.1",
+    "babel-preset-env": "^1.7.0",
     "electron": "^1.8.4",
     "electron-builder": "^20.6.1",
-    "parcel-bundler": "^1.8.1"
+    "parcel-bundler": "^1.8.1",
+    "vue": "^2.5.16"
   }
 }
